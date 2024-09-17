@@ -62,7 +62,7 @@ The architecture diagram below illustrates the components required for the Real-
     - It handles user participation in a quiz session including joining a quiz session and getting quiz data.
     - It provides some apis for client to get question/answer, join a quiz session
 
-4. **Real-Time Score Updates**:
+4. **Real-Time Score Updates Service**:
     - The Real-Time Score Updates service is responsible for updating user scores in real-time.
     - It provides an API endpoint for client to submit user answer then calculates scores. Need to be accurate and consistent.
     - The service then updates the user's score in the database and emits a `leaderboard update` event to the leaderboard service.
@@ -81,10 +81,10 @@ The architecture diagram below illustrates the components required for the Real-
     - It ensures that the services are loosely coupled and can scale independently.
     - It also provides fault tolerance by storing messages until they are processed.
 
-8. Cache:
+8. **Cache**:
     - Cache is used to store the latest leaderboard standings for fast retrieval.
     - It reduces the load on the database and improves the performance of the leaderboard service.
-    - When signal are sent to all clients, it is also used to store the latest scores for each user. At this point, it is used to reduce the load on the database and improve the performance of the Real-Time Score Updates service.
+    - It locks user score when updating to prevent duplicate score update, avoid locking on database row level.
 
 #### Data Flow
 
@@ -102,16 +102,23 @@ The data flow in the Real-Time Quiz feature is as follows:
     - **Justification**: API Gateway provides a managed service for routing requests to microservices, handling authentication, load balancing, and rate limiting.
 
 3. **User Participation Service**:
-    - **Technology**: FastAPI, deployed on AWS Lambda.
-    - **Justification**: FastAPI is a high-performance web framework for building APIs, light-weight and fully support asynchronous. Deploying on AWS Lambda allows for auto-scaling and cost-effective serverless architecture when high traffic is expected.
+    - **Technology**: FastAPI. deploy on AWS Fargate
+    - **Justification**: 
+      - FastAPI is a high-performance web framework for building APIs, light-weight and fully support asynchronous. 
+      - Deploying on AWS Lambda allows for auto-scaling and cost-effective serverless architecture when high traffic is expected.
+      - By using AWS Fargate, don't need to manage servers or clusters. AWS handles the infrastructure provisioning and scaling automatically. And only pay for the resources usage
 
-4. **Real-Time Score Updates**:
-    - **Technology**: Python + Starlette
-    - **Justification**: Consistency in technology stack with Real-time Leaderboard Service. Starlette is a lightweight ASGI framework that can handle high concurrency and is well-suited for real-time applications.
+4. **Real-Time Score Updates Service**:
+    - **Technology**: FastAPI. AWS Fargate
+    - **Justification**: 
+      - Consistency in technology stack with Real-time Leaderboard Service. Starlette is a lightweight ASGI framework that can handle high concurrency and is well-suited for real-time applications.
 
 5. **Real-time Leaderboard Service**:
-    - **Technology**: Python + Starlette
-    - **Justification**: Consistency in technology stack with User Participation Service and Real-Time Score Updates service. Starlette is a lightweight ASGI framework that can handle high concurrency and is well-suited for real-time applications.
+    - **Technology**: FastAPI, WebSocket, deploy on AWS Fargate.
+    - **Justification**: 
+      - Consistency in technology stack with User Participation Service and Real-Time Score Updates service. 
+      - FastAPI is a high-performance web framework for building APIs, light-weight and fully support asynchronous. Deploying on AWS Lambda allows for auto-scaling and cost-effective serverless architecture when high traffic is expected.
+      - WebSockets are used to provide real-time updates to clients.
 
 6. **Database**:
     - **Technology**: AWS RDS (MySQL)
