@@ -15,6 +15,8 @@ from pathlib import Path
 
 from dotenv import load_dotenv
 
+from .sentry import setup_sentry
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -38,7 +40,6 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "rest_framework",
-
     # Own apps
     "core",
     "user_score",
@@ -48,6 +49,7 @@ MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
+    "django.contrib.sessions.middleware.SessionMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
@@ -140,3 +142,5 @@ REST_FRAMEWORK = {
 
 CACHE_URL = os.getenv("CACHE_URL")
 MESSAGE_QUEUE_URL = os.getenv("MESSAGE_QUEUE_URL")
+
+setup_sentry(os.getenv("SENTRY_DSN"))
