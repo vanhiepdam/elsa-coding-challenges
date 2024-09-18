@@ -16,10 +16,17 @@ Including another URLconf
 """
 
 from django.urls import include, path
+from drf_spectacular.views import SpectacularJSONAPIView, SpectacularSwaggerView
 
 from user_score.apis.health import heath_check_view
 
 urlpatterns = [
+    path("quiz-api-schema", SpectacularJSONAPIView.as_view(api_version="v1"), name="schema"),
+    path(
+        "quiz-api-doc",
+        SpectacularSwaggerView.as_view(url_name="schema"),
+        name="swagger-ui",
+    ),
     path("health", heath_check_view),
     path("api/v1/", include("user_score.apis.urls.restful_v1")),
 ]

@@ -30,7 +30,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.getenv(
     "SECRET_KEY", "django-insecure-^517whevl0+we46b$f26z$a3xr8k%^xz#$-w6h=&0%f$q7f(!e"
 )
-DEBUG = os.getenv("DEBUG") == "True"
+DEBUG = os.getenv("DEBUG", "").lower() == "true"
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",")
 
@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "rest_framework",
+    "drf_spectacular",
+
     # Own apps
     "core",
     "user_score",
@@ -138,6 +140,12 @@ REST_FRAMEWORK = {
     "DEFAULT_VERSIONING_CLASS": "rest_framework.versioning.URLPathVersioning",
     "PAGE_SIZE": 10,
     "EXCEPTION_HANDLER": "drf_standardized_errors.handler.exception_handler",
+}
+
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'Elsa Quiz',
+    'VERSION': '1.0.0',
+    'SERVE_INCLUDE_SCHEMA': False,
 }
 
 CACHE_URL = os.getenv("CACHE_URL")

@@ -6,6 +6,8 @@ The architecture is based on the following non-functional assumptions
 - 100 questions per quiz
 - 100 users per quiz
 - 4 answers per question
+- DAU: 1M users
+- TPS: 10k
 
 This is my draft table schemas
 ```
