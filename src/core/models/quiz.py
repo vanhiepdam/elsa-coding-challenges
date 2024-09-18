@@ -51,7 +51,9 @@ class QuizAnswer(SnowFlakeIDModel, TimestampModel):
     is_correct = models.BooleanField(default=False)
 
     class Meta:
-        unique_together = (("id", "is_correct"),)
+        indexes = [
+            models.Index("question_id", "is_correct", name="idx_question_is_correct"),
+        ]
 
 
 class QuizAnswerSubmission(SnowFlakeIDModel, TimestampModel):
@@ -65,10 +67,17 @@ class QuizAnswerSubmission(SnowFlakeIDModel, TimestampModel):
         related_name="submissions",
         blank=False,
     )
-    user_name = models.CharField(max_length=USERNAME_LENGTH)
+    participant = models.ForeignKey(
+        "core.QuizParticipant",
+        related_name="submissions",
+        on_delete=models.CASCADE,
+    )
 
     class Meta:
-        unique_together = (("question", "user_name"),)
+        unique_together = (("question", "participant"),)
+        indexes = [
+            models.Index("question_id", "participant_id", name="idx_question_participant"),
+        ]
 
 
 __all__ = [

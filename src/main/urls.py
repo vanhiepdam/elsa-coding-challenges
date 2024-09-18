@@ -15,4 +15,8 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 
-urlpatterns = []
+from django.urls import include, path
+
+urlpatterns = [
+    path("api/v1/", include("user_score.apis.urls.restful_v1")),
+]

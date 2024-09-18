@@ -1,6 +1,11 @@
 from django.db import models
+from snowflake import SnowflakeGenerator
 
-from core.utils.database import generate_snow_flake_id
+generator = SnowflakeGenerator(instance=42)
+
+
+def generate_snow_flake_id() -> int:
+    return next(generator)
 
 
 class SnowFlakeIDModel(models.Model):

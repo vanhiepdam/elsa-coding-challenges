@@ -13,6 +13,11 @@ python-dotenv = "^1.0.1"
 django-snowflake = "^5.1"
 snowflake-id = "^1.0.2"
 mysqlclient = "^2.2.4"
+redis = "^5.0.8"
+python-redis-lock = "^4.0.0"
+kafka-python = "^2.0.2"
+drf-spectacular = "^0.27.2"
+drf-standardized-errors = "^0.14.1"
 
 
 [tool.poetry.group.dev.dependencies]
@@ -21,6 +26,9 @@ black = "^24.8.0"
 flake8 = "^7.1.1"
 autoflake = "^2.3.1"
 isort = "^5.13.2"
+pytest-mock = "^3.14.0"
+factory-boy = "^3.3.1"
+pytest-django = "^4.9.0"
 
 [build-system]
 requires = ["poetry-core"]
