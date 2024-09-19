@@ -33,6 +33,9 @@ Code flow in user_score folder:
 - After answering a question, the user score in the quiz will be updated
 - The user can only answer the question once
 - Once database was updated, system will send a message to the message broker to notify Real-Time leaderboard service to update the user score in the quiz
+- Add sentry for error tracking
+- Add new relic for performance and log monitoring
+- Add swagger for API documentation
 
 ### How to run
 1. Build docker image
